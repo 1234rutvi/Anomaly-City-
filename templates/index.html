@@ -1,0 +1,1099 @@
+%%writefile anomaly-city/templates/index.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Anomaly City — Data Intelligence</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+rel="stylesheet"
+>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --pink:#ff3b81;
+    --pink2:#ff75ae;
+    --pink3:#ffb3d1;
+
+    --bg:#050507;
+    --text:#f8f5f7;
+    --muted:#817982;
+
+    --border:rgba(255,59,129,.22);
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:Inter,sans-serif;
+
+    min-height:100vh;
+
+    color:var(--text);
+
+    background:
+
+        radial-gradient(
+            circle at 50% 5%,
+            rgba(255,59,129,.16),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 5% 85%,
+            rgba(255,59,129,.08),
+            transparent 30%
+        ),
+
+        var(--bg);
+
+    overflow-x:hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW
+========================================================= */
+
+.glow{
+
+    position:fixed;
+
+    width:520px;
+    height:520px;
+
+    left:50%;
+    top:42%;
+
+    transform:translate(-50%,-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,59,129,.10),
+            transparent 68%
+        );
+
+    filter:blur(45px);
+
+    pointer-events:none;
+
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    width:
+        min(
+            1200px,
+            calc(100% - 40px)
+        );
+
+    height:80px;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+}
+
+
+.logo{
+
+    font-size:19px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+}
+
+
+.logo span{
+
+    color:var(--pink);
+
+    text-shadow:
+        0 0 20px
+        rgba(255,59,129,.65);
+}
+
+
+.nav-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#777078;
+
+    font-size:9px;
+
+    font-weight:600;
+
+    letter-spacing:1.5px;
+}
+
+
+.dot{
+
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--pink);
+
+    box-shadow:
+        0 0 12px
+        var(--pink);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+    width:
+        min(
+            900px,
+            calc(100% - 40px)
+        );
+
+    margin:
+        90px auto 0;
+
+    text-align:center;
+}
+
+
+.eyebrow{
+
+    color:var(--pink);
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:3px;
+}
+
+
+h1{
+
+    margin-top:18px;
+
+    font-size:
+        clamp(
+            44px,
+            7vw,
+            78px
+        );
+
+    line-height:1;
+
+    letter-spacing:-4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            var(--pink3)
+        );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+}
+
+
+.hero p{
+
+    max-width:570px;
+
+    margin:
+        26px auto 0;
+
+    color:var(--muted);
+
+    font-size:13px;
+
+    line-height:1.8;
+}
+
+
+/* =========================================================
+   UPLOAD CARD
+========================================================= */
+
+.upload-card{
+
+    position:relative;
+
+    width:
+        min(
+            650px,
+            calc(100% - 40px)
+        );
+
+    margin:
+        55px auto 0;
+
+    padding:40px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.045),
+            rgba(255,59,129,.025)
+        );
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+
+        0 40px 100px
+        rgba(0,0,0,.5),
+
+        inset 0 1px
+        rgba(255,255,255,.05);
+}
+
+
+.upload-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:20%;
+    right:20%;
+
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--pink),
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px
+        var(--pink);
+}
+
+
+/* =========================================================
+   DROP AREA
+========================================================= */
+
+.drop-area{
+
+    padding:
+        55px 25px;
+
+    border:
+        1px dashed
+        rgba(255,59,129,.35);
+
+    border-radius:18px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    background:
+        rgba(255,59,129,.018);
+
+    transition:
+        .3s ease;
+}
+
+
+.drop-area:hover,
+.drop-area.dragover{
+
+    border-color:
+        var(--pink);
+
+    background:
+        rgba(255,59,129,.06);
+
+    box-shadow:
+        inset 0 0 40px
+        rgba(255,59,129,.04),
+
+        0 0 30px
+        rgba(255,59,129,.08);
+
+    transform:
+        translateY(-3px);
+}
+
+
+/* =========================================================
+   UPLOAD ICON
+========================================================= */
+
+.upload-icon{
+
+    width:62px;
+    height:62px;
+
+    margin:
+        0 auto 20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:18px;
+
+    font-size:27px;
+
+    color:white;
+
+    background:
+        rgba(255,59,129,.10);
+
+    border:
+        1px solid
+        rgba(255,59,129,.25);
+
+    box-shadow:
+        0 0 25px
+        rgba(255,59,129,.10);
+}
+
+
+.drop-title{
+
+    font-size:15px;
+
+    font-weight:700;
+}
+
+
+.drop-subtitle{
+
+    margin-top:8px;
+
+    color:#706970;
+
+    font-size:11px;
+}
+
+
+.file-types{
+
+    margin-top:18px;
+
+    color:#5f5861;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+
+/* =========================================================
+   FILE NAME
+========================================================= */
+
+#fileInput{
+
+    display:none;
+}
+
+
+.file-name{
+
+    min-height:16px;
+
+    margin-top:18px;
+
+    color:var(--pink);
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.analyze-btn{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--pink),
+            #ff6299
+        );
+
+    color:white;
+
+    font-family:Inter,sans-serif;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 10px 30px
+        rgba(255,59,129,.25);
+
+    transition:
+        .25s ease;
+}
+
+
+.analyze-btn:hover{
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 15px 40px
+        rgba(255,59,129,.38);
+}
+
+
+.analyze-btn:disabled{
+
+    opacity:.45;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+
+    display:none;
+
+    margin-top:18px;
+
+    color:#827982;
+
+    font-size:10px;
+
+    text-align:center;
+}
+
+
+.loader{
+
+    display:inline-block;
+
+    width:10px;
+    height:10px;
+
+    margin-right:8px;
+
+    border:
+        2px solid
+        rgba(255,59,129,.2);
+
+    border-top-color:
+        var(--pink);
+
+    border-radius:50%;
+
+    animation:
+        spin .7s linear infinite;
+}
+
+
+@keyframes spin{
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error{
+
+    display:none;
+
+    margin-top:18px;
+
+    padding:12px;
+
+    border-radius:9px;
+
+    color:#ff7a9f;
+
+    background:
+        rgba(255,59,129,.07);
+
+    border:
+        1px solid
+        rgba(255,59,129,.15);
+
+    font-size:10px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    width:
+        min(
+            900px,
+            calc(100% - 40px)
+        );
+
+    margin:
+        70px auto 30px;
+
+    padding-top:20px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.06);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#4d474f;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+    .navbar{
+
+        width:
+            calc(100% - 24px);
+    }
+
+    .hero{
+
+        margin-top:60px;
+    }
+
+    .upload-card{
+
+        padding:20px;
+    }
+
+    h1{
+
+        letter-spacing:-2px;
+    }
+
+    footer{
+
+        flex-direction:column;
+
+        gap:10px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="glow"></div>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        ◉ ANOMALY
+        <span>CITY</span>
+
+    </div>
+
+
+    <div class="nav-status">
+
+        <span class="dot"></span>
+
+        SYSTEM READY
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+    <div class="eyebrow">
+
+        MACHINE LEARNING × DATA INTELLIGENCE
+
+    </div>
+
+
+    <h1>
+
+        Find what<br>
+        doesn't belong.
+
+    </h1>
+
+
+    <p>
+
+        Upload your dataset and let Anomaly City
+        uncover unusual patterns, suspicious records
+        and hidden signals.
+
+    </p>
+
+</section>
+
+
+<!-- =========================================================
+     UPLOAD
+========================================================= -->
+
+<div class="upload-card">
+
+
+    <div
+        class="drop-area"
+        id="dropArea"
+    >
+
+        <div class="upload-icon">
+
+            ↑
+
+        </div>
+
+
+        <div class="drop-title">
+
+            Drop your dataset here
+
+        </div>
+
+
+        <div class="drop-subtitle">
+
+            or click to browse files
+
+        </div>
+
+
+        <div class="file-types">
+
+            CSV · XLSX · XLS · JSON · TXT · PDF
+
+        </div>
+
+
+        <div
+            class="file-name"
+            id="fileName"
+        ></div>
+
+    </div>
+
+
+    <input
+        type="file"
+        id="fileInput"
+        accept=".csv,.xlsx,.xls,.json,.txt,.pdf"
+    >
+
+
+    <button
+        class="analyze-btn"
+        id="analyzeBtn"
+        disabled
+    >
+
+        ANALYZE DATASET →
+
+    </button>
+
+
+    <div
+        class="loading"
+        id="loading"
+    >
+
+        <span class="loader"></span>
+
+        Processing dataset...
+
+    </div>
+
+
+    <div
+        class="error"
+        id="error"
+    ></div>
+
+
+</div>
+
+
+<footer>
+
+    <span>
+        ANOMALY CITY
+    </span>
+
+    <span>
+        DATA INVESTIGATION PLATFORM
+    </span>
+
+</footer>
+
+
+<script>
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const dropArea =
+    document.getElementById(
+        "dropArea"
+    );
+
+const fileInput =
+    document.getElementById(
+        "fileInput"
+    );
+
+const fileName =
+    document.getElementById(
+        "fileName"
+    );
+
+const analyzeBtn =
+    document.getElementById(
+        "analyzeBtn"
+    );
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+const errorBox =
+    document.getElementById(
+        "error"
+    );
+
+
+let selectedFile = null;
+
+
+/* =========================================================
+   CLICK
+========================================================= */
+
+dropArea.addEventListener(
+    "click",
+    function(){
+
+        fileInput.click();
+
+    }
+);
+
+
+/* =========================================================
+   FILE SELECT
+========================================================= */
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        if(
+            this.files &&
+            this.files.length > 0
+        ){
+
+            selectFile(
+                this.files[0]
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DRAG
+========================================================= */
+
+dropArea.addEventListener(
+    "dragover",
+    function(event){
+
+        event.preventDefault();
+
+        dropArea.classList.add(
+            "dragover"
+        );
+
+    }
+);
+
+
+dropArea.addEventListener(
+    "dragleave",
+    function(){
+
+        dropArea.classList.remove(
+            "dragover"
+        );
+
+    }
+);
+
+
+dropArea.addEventListener(
+    "drop",
+    function(event){
+
+        event.preventDefault();
+
+        dropArea.classList.remove(
+            "dragover"
+        );
+
+
+        if(
+            event.dataTransfer.files.length
+        ){
+
+            selectFile(
+                event.dataTransfer.files[0]
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SELECT FILE
+========================================================= */
+
+function selectFile(file){
+
+    selectedFile = file;
+
+    fileName.textContent =
+        "Selected: " + file.name;
+
+    analyzeBtn.disabled = false;
+
+    errorBox.style.display =
+        "none";
+}
+
+
+/* =========================================================
+   ANALYZE
+========================================================= */
+
+analyzeBtn.addEventListener(
+    "click",
+    async function(){
+
+        if(!selectedFile){
+
+            return;
+
+        }
+
+
+        analyzeBtn.disabled = true;
+
+        loading.style.display =
+            "block";
+
+        errorBox.style.display =
+            "none";
+
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "file",
+            selectedFile
+        );
+
+
+        try{
+
+            const response =
+                await fetch(
+                    "/upload",
+                    {
+                        method:"POST",
+                        body:formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if(
+                !response.ok ||
+                !data.success
+            ){
+
+                throw new Error(
+                    data.error ||
+                    "Upload failed."
+                );
+
+            }
+
+
+            sessionStorage.setItem(
+                "anomalyCityData",
+                JSON.stringify(data)
+            );
+
+
+            window.location.href =
+                "/dashboard";
+
+        }
+
+
+        catch(error){
+
+            errorBox.textContent =
+                error.message;
+
+            errorBox.style.display =
+                "block";
+
+            analyzeBtn.disabled =
+                false;
+
+        }
+
+
+        finally{
+
+            loading.style.display =
+                "none";
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
