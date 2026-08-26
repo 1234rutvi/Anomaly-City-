@@ -1,0 +1,1799 @@
+%%writefile anomaly-city/templates/dashboard.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Anomaly City — 3D Intelligence</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+rel="stylesheet"
+>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --pink:#ff3b81;
+    --pink2:#ff75ae;
+    --pink3:#ffb3d1;
+
+    --dark:#050507;
+
+    --panel:rgba(17,10,18,.82);
+
+    --border:rgba(255,59,129,.20);
+
+    --text:#f8f5f7;
+
+    --muted:#817982;
+
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:Inter,sans-serif;
+
+    color:var(--text);
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 5%,
+            rgba(255,59,129,.14),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 5% 80%,
+            rgba(255,59,129,.07),
+            transparent 30%
+        ),
+
+        var(--dark);
+
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+    width:
+        min(
+            1200px,
+            calc(100% - 40px)
+        );
+
+    height:78px;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
+}
+
+
+.brand{
+
+    font-size:18px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+}
+
+
+.brand span{
+
+    color:var(--pink);
+
+    text-shadow:
+        0 0 18px
+        rgba(255,59,129,.7);
+
+}
+
+
+.back{
+
+    color:#817982;
+
+    text-decoration:none;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    transition:.2s;
+
+}
+
+
+.back:hover{
+
+    color:var(--pink);
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+
+    width:
+        min(
+            1200px,
+            calc(100% - 40px)
+        );
+
+    margin:auto;
+
+    padding:
+        55px 0 35px;
+
+}
+
+
+.eyebrow{
+
+    color:var(--pink);
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:2.5px;
+
+}
+
+
+h1{
+
+    margin-top:12px;
+
+    font-size:43px;
+
+    letter-spacing:-2.5px;
+
+}
+
+
+.filename{
+
+    margin-top:9px;
+
+    color:#777078;
+
+    font-size:12px;
+
+}
+
+
+/* =========================================================
+   3D CITY
+========================================================= */
+
+.city-section{
+
+    position:relative;
+
+    width:
+        min(
+            1200px,
+            calc(100% - 40px)
+        );
+
+    height:390px;
+
+    margin:
+        0 auto 20px;
+
+    overflow:hidden;
+
+    border:
+        1px solid
+        rgba(255,59,129,.18);
+
+    border-radius:22px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 55%,
+            rgba(255,59,129,.13),
+            transparent 30%
+        ),
+
+        linear-gradient(
+            180deg,
+            #0a080b,
+            #050507
+        );
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.45);
+
+}
+
+
+/* =========================================================
+   CITY GRID
+========================================================= */
+
+.city-grid{
+
+    position:absolute;
+
+    left:50%;
+    bottom:-120px;
+
+    width:900px;
+    height:420px;
+
+    transform:
+        translateX(-50%)
+        perspective(500px)
+        rotateX(60deg);
+
+    background:
+
+        repeating-linear-gradient(
+            90deg,
+            rgba(255,59,129,.13) 0,
+            rgba(255,59,129,.13) 1px,
+            transparent 1px,
+            transparent 45px
+        ),
+
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,59,129,.11) 0,
+            rgba(255,59,129,.11) 1px,
+            transparent 1px,
+            transparent 45px
+        );
+
+    box-shadow:
+        0 -20px 80px
+        rgba(255,59,129,.06);
+
+}
+
+
+/* =========================================================
+   BUILDINGS
+========================================================= */
+
+.building{
+
+    position:absolute;
+
+    bottom:110px;
+
+    width:65px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1c1119,
+            #34202d
+        );
+
+    border:
+        1px solid
+        rgba(255,59,129,.35);
+
+    box-shadow:
+        0 0 25px
+        rgba(255,59,129,.08);
+
+    transform:
+        perspective(500px)
+        rotateX(0deg);
+
+}
+
+
+.building::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:10px;
+    right:10px;
+
+    top:12px;
+    bottom:10px;
+
+    background:
+
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,110,165,.65) 0,
+            rgba(255,110,165,.65) 3px,
+            transparent 3px,
+            transparent 12px
+        );
+
+    opacity:.65;
+
+}
+
+
+.b1{
+
+    left:13%;
+
+    height:115px;
+
+}
+
+
+.b2{
+
+    left:25%;
+
+    height:175px;
+
+    width:75px;
+
+}
+
+
+.b3{
+
+    left:40%;
+
+    height:225px;
+
+    width:82px;
+
+    box-shadow:
+        0 0 45px
+        rgba(255,59,129,.18);
+
+}
+
+
+.b4{
+
+    left:56%;
+
+    height:150px;
+
+    width:72px;
+
+}
+
+
+.b5{
+
+    left:70%;
+
+    height:205px;
+
+    width:80px;
+
+}
+
+
+.b6{
+
+    left:82%;
+
+    height:125px;
+
+    width:60px;
+
+}
+
+
+/* =========================================================
+   BUILDING LIGHTS
+========================================================= */
+
+.building span{
+
+    position:absolute;
+
+    z-index:2;
+
+    width:5px;
+    height:5px;
+
+    border-radius:1px;
+
+    background:#ff6b9f;
+
+    box-shadow:
+        0 0 8px
+        #ff3b81;
+
+}
+
+
+/* =========================================================
+   ANOMALY SIGNAL
+========================================================= */
+
+.signal{
+
+    position:absolute;
+
+    left:44%;
+
+    top:75px;
+
+    width:14px;
+    height:14px;
+
+    border-radius:50%;
+
+    background:var(--pink);
+
+    box-shadow:
+
+        0 0 12px
+        var(--pink),
+
+        0 0 35px
+        var(--pink),
+
+        0 0 70px
+        rgba(255,59,129,.8);
+
+    animation:
+        pulse 1.7s infinite;
+
+}
+
+
+.signal::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-16px;
+
+    border:
+        1px solid
+        rgba(255,59,129,.45);
+
+    border-radius:50%;
+
+    animation:
+        ring 1.7s infinite;
+
+}
+
+
+.signal::after{
+
+    content:"ANOMALY";
+
+    position:absolute;
+
+    left:23px;
+
+    top:-5px;
+
+    color:var(--pink);
+
+    font-size:8px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+}
+
+
+@keyframes pulse{
+
+    50%{
+
+        transform:scale(1.25);
+
+        opacity:.65;
+
+    }
+
+}
+
+
+@keyframes ring{
+
+    100%{
+
+        transform:scale(1.7);
+
+        opacity:0;
+
+    }
+
+}
+
+
+/* =========================================================
+   CITY LABEL
+========================================================= */
+
+.city-label{
+
+    position:absolute;
+
+    left:25px;
+
+    bottom:20px;
+
+    z-index:5;
+
+    color:#625962;
+
+    font-size:8px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics{
+
+    width:
+        min(
+            1200px,
+            calc(100% - 40px)
+        );
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:14px;
+
+}
+
+
+.metric{
+
+    padding:24px;
+
+    border:
+        1px solid
+        rgba(255,59,129,.15);
+
+    border-radius:16px;
+
+    background:
+        rgba(255,255,255,.018);
+
+    box-shadow:
+        inset 0 1px
+        rgba(255,255,255,.03);
+
+    transition:.25s;
+
+}
+
+
+.metric:hover{
+
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(255,59,129,.35);
+
+    box-shadow:
+        0 15px 35px
+        rgba(255,59,129,.08);
+
+}
+
+
+.metric-label{
+
+    color:#69616a;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.metric-value{
+
+    margin-top:10px;
+
+    font-size:29px;
+
+    font-weight:800;
+
+}
+
+
+.pink{
+
+    color:var(--pink);
+
+    text-shadow:
+        0 0 18px
+        rgba(255,59,129,.35);
+
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.main{
+
+    width:
+        min(
+            1200px,
+            calc(100% - 40px)
+        );
+
+    margin:
+        18px auto 0;
+
+    display:grid;
+
+    grid-template-columns:
+        1.5fr 1fr;
+
+    gap:18px;
+
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel{
+
+    padding:25px;
+
+    border:
+        1px solid
+        rgba(255,59,129,.15);
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.018);
+
+    backdrop-filter:
+        blur(12px);
+
+}
+
+
+.panel-title{
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+
+.panel-subtitle{
+
+    margin-top:5px;
+
+    color:#69616a;
+
+    font-size:10px;
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper{
+
+    margin-top:22px;
+
+    overflow-x:auto;
+
+}
+
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    font-size:10px;
+
+}
+
+
+th{
+
+    padding:12px;
+
+    text-align:left;
+
+    color:#5e5760;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+}
+
+
+td{
+
+    padding:
+        13px 12px;
+
+    color:#aaa2aa;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.045);
+
+}
+
+
+tr:hover td{
+
+    background:
+        rgba(255,59,129,.035);
+
+}
+
+
+/* =========================================================
+   RISK
+========================================================= */
+
+.score-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+    margin-top:25px;
+
+}
+
+
+.score-circle{
+
+    position:relative;
+
+    width:120px;
+    height:120px;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    border:
+        8px solid
+        rgba(255,59,129,.12);
+
+    box-shadow:
+        0 0 35px
+        rgba(255,59,129,.07);
+
+}
+
+
+.score-circle::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-8px;
+
+    border-radius:50%;
+
+    border:
+        2px solid
+        transparent;
+
+    border-top-color:
+        var(--pink);
+
+    border-right-color:
+        var(--pink);
+
+    transform:
+        rotate(25deg);
+
+}
+
+
+.score-number{
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:var(--pink);
+
+}
+
+
+.score-label{
+
+    margin-top:3px;
+
+    color:#706870;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
+}
+
+
+.score-text{
+
+    max-width:230px;
+
+    color:#817982;
+
+    font-size:10px;
+
+    line-height:1.7;
+
+}
+
+
+.risk-list{
+
+    margin-top:25px;
+
+}
+
+
+.risk-row{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:
+        15px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.055);
+
+}
+
+
+.risk-name{
+
+    font-size:11px;
+
+}
+
+
+.risk-badge{
+
+    padding:
+        5px 9px;
+
+    border-radius:6px;
+
+    font-size:8px;
+
+    font-weight:800;
+
+}
+
+
+.high{
+
+    color:#ff617c;
+
+    background:
+        rgba(255,97,124,.09);
+
+}
+
+
+.medium{
+
+    color:#ffb45e;
+
+    background:
+        rgba(255,180,94,.09);
+
+}
+
+
+.low{
+
+    color:#55d69b;
+
+    background:
+        rgba(85,214,155,.09);
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+    width:
+        min(
+            1200px,
+            calc(100% - 40px)
+        );
+
+    margin:
+        65px auto 30px;
+
+    padding-top:20px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.07);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#4d474f;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:850px){
+
+    .metrics{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .main{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media(max-width:550px){
+
+    .navbar,
+    .header,
+    .metrics,
+    .main,
+    footer{
+
+        width:
+            calc(100% - 24px);
+
+    }
+
+
+    h1{
+
+        font-size:32px;
+
+    }
+
+
+    .city-section{
+
+        width:
+            calc(100% - 24px);
+
+        height:320px;
+
+    }
+
+
+    .building{
+
+        transform:scale(.75);
+
+        transform-origin:
+            bottom center;
+
+    }
+
+
+    .metrics{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .score-box{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+    footer{
+
+        flex-direction:column;
+
+        gap:10px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        ◉ ANOMALY
+        <span>CITY</span>
+
+    </div>
+
+
+    <a
+        href="/"
+        class="back"
+    >
+
+        ← NEW DATASET
+
+    </a>
+
+</nav>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<section class="header">
+
+    <div class="eyebrow">
+
+        3D INVESTIGATION ENVIRONMENT
+
+    </div>
+
+
+    <h1>
+
+        Dataset intelligence
+
+    </h1>
+
+
+    <div
+        class="filename"
+        id="filename"
+    >
+
+        Loading dataset...
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     3D CITY
+========================================================= -->
+
+<section class="city-section">
+
+
+    <div class="city-grid"></div>
+
+
+    <div class="building b1">
+        <span style="top:20px;left:15px"></span>
+        <span style="top:50px;left:40px"></span>
+        <span style="top:80px;left:20px"></span>
+    </div>
+
+
+    <div class="building b2">
+        <span style="top:20px;left:15px"></span>
+        <span style="top:55px;left:45px"></span>
+        <span style="top:90px;left:20px"></span>
+        <span style="top:125px;left:45px"></span>
+    </div>
+
+
+    <div class="building b3">
+        <span style="top:25px;left:18px"></span>
+        <span style="top:65px;left:50px"></span>
+        <span style="top:105px;left:18px"></span>
+        <span style="top:145px;left:50px"></span>
+        <span style="top:185px;left:18px"></span>
+    </div>
+
+
+    <div class="building b4">
+        <span style="top:25px;left:15px"></span>
+        <span style="top:65px;left:45px"></span>
+        <span style="top:105px;left:20px"></span>
+    </div>
+
+
+    <div class="building b5">
+        <span style="top:25px;left:20px"></span>
+        <span style="top:65px;left:50px"></span>
+        <span style="top:105px;left:20px"></span>
+        <span style="top:145px;left:50px"></span>
+    </div>
+
+
+    <div class="building b6">
+        <span style="top:20px;left:15px"></span>
+        <span style="top:55px;left:40px"></span>
+        <span style="top:90px;left:20px"></span>
+    </div>
+
+
+    <div class="signal"></div>
+
+
+    <div class="city-label">
+
+        ANOMALY CITY · LIVE DATA MAP
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     METRICS
+========================================================= -->
+
+<section class="metrics">
+
+
+    <div class="metric">
+
+        <div class="metric-label">
+            TOTAL RECORDS
+        </div>
+
+        <div
+            class="metric-value"
+            id="records"
+        >
+            —
+        </div>
+
+    </div>
+
+
+    <div class="metric">
+
+        <div class="metric-label">
+            ANOMALIES
+        </div>
+
+        <div
+            class="metric-value pink"
+            id="anomalies"
+        >
+            —
+        </div>
+
+    </div>
+
+
+    <div class="metric">
+
+        <div class="metric-label">
+            ANOMALY RATE
+        </div>
+
+        <div
+            class="metric-value"
+            id="rate"
+        >
+            —
+        </div>
+
+    </div>
+
+
+    <div class="metric">
+
+        <div class="metric-label">
+            COLUMNS
+        </div>
+
+        <div
+            class="metric-value"
+            id="columns"
+        >
+            —
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<section class="main">
+
+
+    <!-- =====================================================
+         SUSPICIOUS RECORDS
+    ====================================================== -->
+
+    <div class="panel">
+
+        <div class="panel-title">
+
+            Suspicious records
+
+        </div>
+
+
+        <div class="panel-subtitle">
+
+            Records requiring investigation
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            RECORD
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                        <th>
+                            RISK
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="recordsTable"
+                ></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RISK ASSESSMENT
+    ====================================================== -->
+
+    <div class="panel">
+
+        <div class="panel-title">
+
+            Risk assessment
+
+        </div>
+
+
+        <div class="panel-subtitle">
+
+            Overall anomaly profile
+
+        </div>
+
+
+        <div class="score-box">
+
+
+            <div class="score-circle">
+
+                <div
+                    class="score-number"
+                    id="score"
+                >
+                    —
+                </div>
+
+
+                <div class="score-label">
+
+                    RISK
+
+                </div>
+
+            </div>
+
+
+            <div class="score-text">
+
+                Anomaly City evaluates unusual
+                behaviour across the uploaded
+                dataset.
+
+            </div>
+
+        </div>
+
+
+        <div class="risk-list">
+
+
+            <div class="risk-row">
+
+                <span class="risk-name">
+                    High risk
+                </span>
+
+                <span
+                    class="risk-badge high"
+                    id="highRisk"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="risk-row">
+
+                <span class="risk-name">
+                    Medium risk
+                </span>
+
+                <span
+                    class="risk-badge medium"
+                    id="mediumRisk"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="risk-row">
+
+                <span class="risk-name">
+                    Low risk
+                </span>
+
+                <span
+                    class="risk-badge low"
+                    id="lowRisk"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <span>
+        ANOMALY CITY
+    </span>
+
+
+    <span>
+        MACHINE LEARNING × DATA INTELLIGENCE
+    </span>
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   GET STORED DATA
+========================================================= */
+
+const stored =
+    sessionStorage.getItem(
+        "anomalyCityData"
+    );
+
+
+if(!stored){
+
+    document.getElementById(
+        "filename"
+    ).textContent =
+        "No dataset found. Please upload a file.";
+
+}
+else{
+
+    const data =
+        JSON.parse(stored);
+
+
+    /* =====================================================
+       BASIC DATA
+    ===================================================== */
+
+    document.getElementById(
+        "filename"
+    ).textContent =
+        data.filename || "Uploaded dataset";
+
+
+    const total =
+        Number(data.rows) || 0;
+
+
+    document.getElementById(
+        "records"
+    ).textContent =
+        total.toLocaleString();
+
+
+    document.getElementById(
+        "columns"
+    ).textContent =
+        Number(data.columns || 0);
+
+
+    /* =====================================================
+       DEMO ANOMALY VALUES
+       Replace with Isolation Forest later
+    ===================================================== */
+
+    const anomalyCount =
+        Math.max(
+            1,
+            Math.round(
+                total * 0.08
+            )
+        );
+
+
+    const anomalyRate =
+        total > 0
+        ? (
+            anomalyCount /
+            total *
+            100
+        )
+        : 0;
+
+
+    const riskScore =
+        Math.min(
+            99,
+            Math.round(
+                anomalyRate * 5
+            )
+        );
+
+
+    document.getElementById(
+        "anomalies"
+    ).textContent =
+        anomalyCount.toLocaleString();
+
+
+    document.getElementById(
+        "rate"
+    ).textContent =
+        anomalyRate.toFixed(1) + "%";
+
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        riskScore;
+
+
+    /* =====================================================
+       RISK DISTRIBUTION
+    ===================================================== */
+
+    const high =
+        Math.round(
+            anomalyCount * 0.30
+        );
+
+
+    const medium =
+        Math.round(
+            anomalyCount * 0.40
+        );
+
+
+    const low =
+        anomalyCount -
+        high -
+        medium;
+
+
+    document.getElementById(
+        "highRisk"
+    ).textContent =
+        high;
+
+
+    document.getElementById(
+        "mediumRisk"
+    ).textContent =
+        medium;
+
+
+    document.getElementById(
+        "lowRisk"
+    ).textContent =
+        low;
+
+
+    /* =====================================================
+       TABLE
+    ===================================================== */
+
+    const table =
+        document.getElementById(
+            "recordsTable"
+        );
+
+
+    const preview =
+        data.preview || [];
+
+
+    preview.forEach(
+        function(record,index){
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const values =
+                Object.values(record);
+
+
+            let previewText =
+                values
+                    .slice(0,2)
+                    .join(" · ");
+
+
+            if(
+                previewText.length > 45
+            ){
+
+                previewText =
+                    previewText.substring(
+                        0,
+                        45
+                    )
+                    + "...";
+
+            }
+
+
+            const risk =
+                index % 3 === 0
+                ? "HIGH"
+                : index % 3 === 1
+                ? "MEDIUM"
+                : "LOW";
+
+
+            const riskClass =
+                risk === "HIGH"
+                ? "high"
+                : risk === "MEDIUM"
+                ? "medium"
+                : "low";
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        previewText
+                    )}
+                </td>
+
+                <td>
+                    ANOMALOUS
+                </td>
+
+                <td>
+
+                    <span
+                        class="risk-badge ${riskClass}"
+                    >
+                        ${risk}
+                    </span>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
